@@ -116,49 +116,49 @@ const ScanScreen = ({ navigation }) => {
               Upphædd:{cardData.balance}
             </Text>
           </View>
-          <View style={{
+         <ScrollView style={{
             flexDirection: "column",
             width: "100%",
             padding: 10,
-            marginBottom: "30%",
+            marginBottom: 30,
 
           }}>
+            <View
+              style={{ padding: 10, flexDirection: "row", width: "100%" ,justifyContent:'space-between',marginRight:10}}>
+              <Text style={{ width: 80, fontWeight: "bold", color: "black" }}>{headerData[0]}</Text>
+              <Text style={{ width: 100, fontWeight: "bold", color: "black" }}>{headerData[1]}</Text>
+              <Text style={{ width: 80, fontWeight: "bold", color: "black" }}>{headerData[2]}</Text>
+              <Text
+                style={{ width: 100, fontWeight: "bold", color: "black" }}>{headerData[3]}</Text></View>
+            {cardData.transactions&&cardData?.transactions.map((item,index)=>{
+              return (
+                <View key={index} style={{
+                  padding: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 5,justifyContent:'space-between'
+                }}>
+                  <Text
+                    style={{ width: 80, fontSize: 12, color: "black" }}>{item.operationDate || "null"}</Text>
+                  <Text style={{
+                    width: 100,
+                    fontSize: 12,
+                    color: "black",
+                  }}>{item.transactionType || "null"}</Text>
+                  <Text style={{
+                    width: 80,
+                    fontSize: 12,
+                    color: "black",
+                  }}>{item.currency}. {item.amount || "null"}</Text>
+                  <Text style={{ width: 100, fontSize: 12, color: "black" }}>{item.storeName || "null"}</Text>
 
-            <FlatList data={cardData.transactions} keyExtractor={(item, index) => `key-${index}`}
-                      renderItem={({ item, index }) => {
-                        return (
-                          <View key={index} style={{
-                            padding: 10,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            marginBottom: 5,
-                          }}>
-                            <Text
-                              style={{ width: 80, fontSize: 12, color: "black" }}>{item.operationDate || "null"}</Text>
-                            <Text style={{
-                              width: 100,
-                              fontSize: 12,
-                              color: "black",
-                            }}>{item.transactionType || "null"}</Text>
-                            <Text style={{
-                              width: 100,
-                              fontSize: 12,
-                              color: "black",
-                            }}>{item.currency}. {item.amount || "null"}</Text>
-                            <Text style={{ width: 100, fontSize: 12, color: "black" }}>{item.storeName || "null"}</Text>
+                </View>
+              );
+            })}
 
-                          </View>
-                        );
-                      }}
-                      ListHeaderComponent={<View
-                        style={{ padding: 10, flexDirection: "row", justifyContent: "space-around", width: "100%" }}>
-                        <Text style={{ width: 100, fontWeight: "bold", color: "black" }}>{headerData[0]}</Text>
-                        <Text style={{ width: 100, fontWeight: "bold", color: "black" }}>{headerData[1]}</Text>
-                        <Text style={{ width: 100, fontWeight: "bold", color: "black" }}>{headerData[2]}</Text>
-                        <Text
-                          style={{ width: 100, fontWeight: "bold", color: "black" }}>{headerData[3]}</Text></View>} />
-          </View>
+
+
+          </ScrollView>
 
         </View> :
       <RNCamera style={StyleSheet.absoluteFill}
