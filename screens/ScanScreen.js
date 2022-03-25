@@ -17,7 +17,7 @@ const CAM_VIEW_HEIGHT = Dimensions.get('screen').width * 1.5;
 const CAM_VIEW_WIDTH = Dimensions.get('screen').width;
 
 const leftMargin = 200;
-const topMargin = 30;
+const topMargin = 50;
 const frameWidth = 300;
 const frameHeight = 150;
 
@@ -151,14 +151,9 @@ const ScanScreen = () => {
         <RNCamera style={StyleSheet.absoluteFillObject}
 
 
-            rectOfInterest={{
-                x: 0.3,
-                y: 0.3,
-                width: 0.6,
-                height: 0.5,
-            }}
+            rectOfInterest={{ x: 0.1, y: 0.25, width: 0.6, height: 0.4 }}
             cameraViewDimensions={{
-                width: CAM_VIEW_WIDTH,
+                width: CAM_VIEW_WIDTH+100,
                 height: CAM_VIEW_HEIGHT,
             }}
                   onBarCodeRead={handleBarCodeScanned}
