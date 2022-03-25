@@ -3,43 +3,39 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Text, FlatList, Button, ActivityIndicator, Dimensions,
+  Text, FlatList, Button, ActivityIndicator, Dimensions, ScrollView,
 } from "react-native";
 
 import GetCreditData from "../Api/GetCreditData";
 import { useCardData } from "../provider/AppProvider";
 
-import { RNCamera, FaceDetector } from "react-native-camera";
 
-import BarcodeMask, { LayoutChangeEvent } from "react-native-barcode-mask";
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import {RNCamera} from "react-native-camera";
 
-const ScanScreen = ({ navigation }) => {
+const CAM_VIEW_HEIGHT = Dimensions.get('screen').width * 1.5;
+const CAM_VIEW_WIDTH = Dimensions.get('screen').width;
+
+const leftMargin = 200;
+const topMargin = 30;
+const frameWidth = 300;
+const frameHeight = 150;
+
+const scanAreaX = leftMargin / CAM_VIEW_HEIGHT;
+const scanAreaY = topMargin / CAM_VIEW_WIDTH;
+const scanAreaWidth = frameWidth / CAM_VIEW_HEIGHT;
+const scanAreaHeight = frameHeight / CAM_VIEW_WIDTH;
+const ScanScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [isBorder, setIsBorder] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const { setCardNumber, cardData, setCardData } = useCardData();
   const headerData = ["Dato", "Slag", "Upphædd", "Handil"];
   const [border, setBorder] = useState({ height: 100, width: 300, x: 0, y: 0 });
-  const width = Dimensions.get("window").width;
-  const height = Dimensions.get("window").height;
-  const viewMinX = (width - border.width) / 2;
-  const viewMinY = (height - border.height) / 2;
-  const onLayoutMeasuredHandler = (e: LayoutChangeEvent) => {
-    setBorder({
-      height: e.nativeEvent.layout.height,
-      width: e.nativeEvent.layout.width,
-      x: e.nativeEvent.layout.x,
-      y: e.nativeEvent.layout.y,
-    });
-    alert(JSON.stringify({
-      height: e.nativeEvent.layout.height,
-      width: e.nativeEvent.layout.width,
-      x: e.nativeEvent.layout.x,
-      y: e.nativeEvent.layout.y,
-    }));
-  };
+
+    const [scannerButton, setScannerButton] = useState(false);
 
   const getCreditData = (number) => {
     try {
@@ -57,26 +53,14 @@ const ScanScreen = ({ navigation }) => {
       alert(error);
     }
   };
-
+    const skipCamera=()=>{
+        setScanned(true)
+        setScannerButton(false)
+    }
   const handleBarCodeScanned = async ({ type, data, bounds }) => {
 
-    const { x, y } = bounds.origin[0];
-    const { height, width } = bounds;
-
-    // setBorder({height: height,width: width,x:border.x ,y:border.y })
-    alert(JSON.stringify(bounds));
-
-    if (Math.abs(x - border.x) <= 150 && Math.abs(y - border.y) <= 100) {
-      alert(JSON.stringify({ height: height, width: width, x: x, y: y }));
-      setBorder({
-        height: (viewMinY + border.height / 2),
-        width: (viewMinX + border.width / 2),
-        x: (viewMinX + border.width / 2),
-        y: (viewMinY + border.height / 2),
-      });
-      setScanned(true);
-      // await getCreditData(data)
-    }
+      setScannerButton(true)
+       await getCreditData(data)
 
   };
 
@@ -161,15 +145,47 @@ const ScanScreen = ({ navigation }) => {
           </ScrollView>
 
         </View> :
-      <RNCamera style={StyleSheet.absoluteFill}
-                // cameraViewDimensions={{ width: 1.0, height: 1.0 }}
-                // rectOfInterest={{ x : 0 ,  y : 0, width: 1.0, height: 1.0 }}
-                onBarCodeRead={handleBarCodeScanned}
-      >
-        <BarcodeMask width={300} height={100} showAnimatedLine={false} edgeRadius={30}
-                     onLayoutMeasured={onLayoutMeasuredHandler} />
 
-      </RNCamera>
+
+        <View style={{flex:1}}>
+        <RNCamera style={StyleSheet.absoluteFillObject}
+
+
+            rectOfInterest={{
+                x: 0.3,
+                y: 0.3,
+                width: 0.6,
+                height: 0.5,
+            }}
+            cameraViewDimensions={{
+                width: CAM_VIEW_WIDTH,
+                height: CAM_VIEW_HEIGHT,
+            }}
+                  onBarCodeRead={handleBarCodeScanned}
+        >
+            <View style={{flexDirection:'column'}}>
+            <View
+                style={{
+                    position: 'absolute',
+                    top: leftMargin,
+                    right: topMargin,
+                    width: frameWidth,
+                    height: frameHeight,
+                    borderWidth: 2,
+                    borderColor: 'white',
+                    borderRadius:30
+
+                }}
+            />
+                {scannerButton&&
+
+                    <TouchableOpacity onPress={skipCamera}  style={{width:100,height:100,borderWidth:2,borderColor:'white' ,borderRadius: 50,alignSelf:'center',top: CAM_VIEW_HEIGHT-50}}>
+
+                    </TouchableOpacity>}
+            </View>
+        </RNCamera>
+
+        </View>
 
   );
 };

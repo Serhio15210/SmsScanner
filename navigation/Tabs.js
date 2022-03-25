@@ -2,10 +2,13 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { Text, View } from "react-native";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 import ScanScreen from "../screens/ScanScreen";
 import HistoryScreen from "../screens/HistoryScreen";
 import InfoScreen from "../screens/InfoScreen";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 const Tab = createBottomTabNavigator();
 
 
@@ -34,12 +37,14 @@ const Tabs = () => {
                 <View style={{
                     width: "100%",
                     alignItems:'center',
-                    justifyContent:'center',
+                    flexDirection:'row',
+                    justifyContent:'space-between',
                     alignSelf:'center',
                     top:30,
-                    left:140
+
 
                 }}>
+                    <View></View>
                     <View style={{
                         width: 100,
                         height: 100,
@@ -51,6 +56,7 @@ const Tabs = () => {
                     }}>
                         <Text style={{color:"white",alignSelf:'center',fontWeight:"bold",fontSize:25}}>S M S</Text>
                     </View>
+                    <View></View>
 
                 </View>
             )
@@ -68,7 +74,7 @@ const Tabs = () => {
                             height: "100%",
                             width: 150,
                         }}>
-                        <FontAwesome5 name="history" style={{
+                        <Icon name="history" style={{
                             width: 30,
                             height: 30,
                             textAlign: "center",
@@ -81,7 +87,7 @@ const Tabs = () => {
                             fontSize: 11,
                             textAlign: "center",
                             top:10
-                        }}>История</Text>
+                        }}>Seinastu</Text>
                     </View>
                 ),
             }} >
@@ -112,7 +118,7 @@ const Tabs = () => {
                             fontSize: 11,
                             textAlign: "center",
                             top:10
-                        }}>Скан</Text>
+                        }}>Skanna</Text>
                     </View>
                 ),
             }} listeners={({navigation}) => ({
@@ -151,7 +157,7 @@ const Tabs = () => {
                             fontSize: 11,
                             textAlign: "center",
                             top:10
-                        }}>Инфо</Text>
+                        }}>Kundatænastan</Text>
                     </View>
                 ),
             }} />
